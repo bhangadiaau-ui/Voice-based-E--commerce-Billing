@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Voice Billing System</title>
+
+<style>
+
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(135deg,#4facfe,#00f2fe);
+    height:100vh;
+    margin:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.container{
+    background:white;
+    width:500px;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+h1{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+button{
+    width:100%;
+    padding:15px;
+    font-size:18px;
+    border:none;
+    border-radius:10px;
+    background:#007bff;
+    color:white;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    background:#0056b3;
+}
+
+.section{
+    margin-top:25px;
+}
+
+.card{
+    background:#f7f7f7;
+    padding:15px;
+    border-radius:10px;
+    margin-top:10px;
+}
+
+.cart-item{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:8px;
+}
+
+.total{
+    font-size:20px;
+    font-weight:bold;
+    color:#d9534f;
+}
+
+.status{
+    text-align:center;
+    margin-top:10px;
+    color:#666;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🎤 Voice Billing System</h1>
+
+<button onclick="recordVoice()">Start Voice Input</button>
+
+<div class="status" id="status">
+Press button and speak items
+</div>
+
+<div class="section">
+
+<h3>Recognized Speech</h3>
+
+<div class="card" id="speechBox">
+Waiting for input...
+</div>
+
+</div>
+
+
+<div class="section">
+
+<h3>Cart</h3>
+
+<div class="card" id="cartBox">
+Cart is empty
+</div>
+
+</div>
+
+
+<div class="section">
+
+<h3>Total</h3>
+
+<div class="card total" id="totalBox">
+₹ 0
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+async function recordVoice(){
+
+    document.getElementById("status").innerText="Listening... Speak now";
+
+    try{
+
+        const response = await fetch("/record",{
+            method:"POST"
+        });
+
+        const data = await response.json();
+
+        updateSpeech(data.speech);
+        updateCart(data.cart);
+        updateTotal(data.total);
+
+        document.getElementById("status").innerText="Voice processed";
+
+    }
+    catch(error){
+
+        document.getElementById("status").innerText="Error connecting to server";
+
+    }
+
+}
+
+
+
+function updateSpeech(text){
+
+    const box=document.getElementById("speechBox");
+
+    if(!text){
+        box.innerHTML="No speech detected";
+        return;
+    }
+
+    box.innerHTML=text;
+
+}
+
+
+
+function updateCart(cart){
+
+    const box=document.getElementById("cartBox");
+
+    if(Object.keys(cart).length===0){
+
+        box.innerHTML="Cart is empty";
+        return;
+
+    }
+
+    let html="";
+
+    for(let item in cart){
+
+        html+=`
+        <div class="cart-item">
+            <span>${item}</span>
+            <span>x ${cart[item]}</span>
+        </div>
+        `;
+
+    }
+
+    box.innerHTML=html;
+
+}
+
+
+
+function updateTotal(total){
+
+    document.getElementById("totalBox").innerText="₹ "+total;
+
+}
+
+</script>
+
+</body>
+</html>

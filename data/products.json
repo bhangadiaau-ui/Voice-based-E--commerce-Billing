@@ -1,0 +1,25 @@
+{
+  "rice": 50,
+  "wheat": 45,
+  "atta": 48,
+
+  "milk": 30,
+  "curd": 40,
+  "butter": 55,
+  "paneer": 90,
+
+  "apple": 60,
+  "apples": 60,
+  "banana": 20,
+  "bananas": 20,
+  "orange": 35,
+
+  "chocolate": 25,
+  "chocolates": 25,
+  "biscuit": 20,
+  "biscuits": 20,
+
+  "oil": 140,
+  "sugar": 40,
+  "salt": 20
+}
